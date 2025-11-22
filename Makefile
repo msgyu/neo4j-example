@@ -2,7 +2,7 @@ DOCKER_COMPOSE ?= docker compose -f docker/compose.yml
 NEO4J_USER ?= neo4j
 NEO4J_PASS ?= localtest
 
-.PHONY: help up down logs seed cypher shell status kaggle-data
+.PHONY: help up down logs seed cypher shell status kaggle-data restart
 
 help:
 	@echo "Available targets:"
@@ -19,6 +19,9 @@ up:
 
 down:
 	$(DOCKER_COMPOSE) down -v
+
+restart:
+	$(DOCKER_COMPOSE) up -d --force-recreate neo4j
 
 logs:
 	$(DOCKER_COMPOSE) logs -f neo4j

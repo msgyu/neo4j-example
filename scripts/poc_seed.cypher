@@ -12,16 +12,22 @@ WITH row,
      CASE row.episodes WHEN 'Unknown' THEN NULL ELSE toInteger(row.episodes) END AS episodeCount,
      CASE row.rating WHEN 'Unknown' THEN NULL ELSE toFloat(row.rating) END AS avgRating,
      CASE row.members WHEN '' THEN NULL ELSE toInteger(row.members) END AS members
-MERGE (t:Title {title_id: row.anime_id})
-SET t.title = row.name,
-    t.type = coalesce(row.type, 'unknown'),
-    t.release_year = NULL,
-    t.episode_count = episodeCount,
-    t.member_count = members,
-    t.average_rating = avgRating,
-    t.rating_source = 'kaggle_anime',
-    t.popularity = members
+CALL {
+  WITH row, episodeCount, avgRating, members
+  MERGE (t:Title {title_id: row.anime_id})
+  SET t.title = row.name,
+      t.type = coalesce(row.type, 'unknown'),
+      t.release_year = NULL,
+      t.episode_count = episodeCount,
+      t.member_count = members,
+      t.average_rating = avgRating,
+      t.rating_source = 'kaggle_anime',
+      t.popularity = members
+  RETURN t
+}
+
 WITH row, t
+
 WITH row, t, [genre IN split(coalesce(row.genre,''), ',') WHERE trim(genre) <> '' AND trim(genre) <> 'Unknown'] AS genres
 UNWIND range(0, size(genres)-1) AS idx
 WITH t, trim(genres[idx]) AS genreName, idx
@@ -36,17 +42,20 @@ SET rel.kind = CASE idx WHEN 0 THEN 'main' ELSE 'sub' END,
     rel.source = 'kaggle_anime';
 
 // --- Load Users + Interactions ---
-LOAD CSV WITH HEADERS FROM 'file:///kaggle/rating_sample.csv' AS row
+LOAD CSV WITH HEADERS FROM 'file:///kaggle/rating.csv' AS row
 WITH row WHERE row.user_id <> '' AND row.anime_id <> ''
-MERGE (u:User {user_id: row.user_id})
-WITH row, u
-MATCH (t:Title {title_id: row.anime_id})
-MERGE (u)-[rel:INTERACTED_WITH]->(t)
-SET rel.kind = CASE row.rating WHEN '-1' THEN 'plan' ELSE 'rated' END,
-    rel.rating = CASE row.rating WHEN '-1' THEN NULL ELSE toFloat(row.rating) END,
-    rel.status = CASE row.rating WHEN '-1' THEN 'planned' ELSE 'completed' END,
-    rel.weight = CASE row.rating WHEN '-1' THEN 0.2 ELSE toFloat(row.rating)/10 END,
-    rel.source = 'kaggle_anime_ratings';
+CALL {
+  WITH row
+  MERGE (u:User {user_id: row.user_id})
+  WITH row, u
+  MATCH (t:Title {title_id: row.anime_id})
+  MERGE (u)-[rel:INTERACTED_WITH]->(t)
+  SET rel.kind = CASE row.rating WHEN '-1' THEN 'plan' ELSE 'rated' END,
+      rel.rating = CASE row.rating WHEN '-1' THEN NULL ELSE toFloat(row.rating) END,
+      rel.status = CASE row.rating WHEN '-1' THEN 'planned' ELSE 'completed' END,
+      rel.weight = CASE row.rating WHEN '-1' THEN 0.2 ELSE toFloat(row.rating)/10 END,
+      rel.source = 'kaggle_anime_ratings'
+} IN TRANSACTIONS OF 5000 ROWS;
 
 // --- Load mock Person nodes ---
 LOAD CSV WITH HEADERS FROM 'file:///persons_mock.csv' AS row
