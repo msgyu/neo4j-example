@@ -6,7 +6,11 @@
    git clone https://github.com/msgyu/neo4j-example.git
    cd neo4j-example
    ```
-3. Kaggle から提供された CSV を `example_data/kaggle-data` から `data/kaggle` へコピー（リポジトリには同梱済み）。
+3. Kaggle からダウンロードしたデータセット（`archive.zip`）を `data/` 配下に保存し、以下で展開して `anime.csv` と `rating.csv` を作成。
+   ```bash
+   unzip archive.zip -d data/kaggle
+   ```
+   ※ すでに `example_data/kaggle-data/*.csv` がある場合はコピーしても問題ありません。
 4. `rating.csv` はサイズが大きいため PoC 用にサンプルを作成：
    ```bash
    head -n 50001 data/kaggle/rating.csv > data/kaggle/rating_sample.csv

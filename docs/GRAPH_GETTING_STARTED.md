@@ -9,7 +9,7 @@
 
 ## 2. セットアップ手順
 1. 依存ツール: Docker / Docker Compose、`cypher-shell`（Neo4j コンテナに同梱）。
-2. データ配置: `example_data/kaggle-data` から `data/kaggle` にコピー済み。`rating_sample.csv` は `head -n 50001 rating.csv > rating_sample.csv` で生成し、PoC ではこちらを読み込みます。モックデータは `data/*.csv` に用意済み。
+2. データ配置: Kaggle から取得した `archive.zip` を `data/` に置き、`unzip archive.zip -d data/kaggle` で `anime.csv` / `rating.csv` を展開（既存の `example_data/kaggle-data` からコピーしても可）。`rating_sample.csv` は `head -n 50001 rating.csv > rating_sample.csv` で生成し、PoC ではこちらを読み込みます。モックデータは `data/*.csv` に用意済み。
 3. Neo4j 起動:
    ```bash
    docker compose -f docker/compose.yml up -d

@@ -4,7 +4,7 @@
 
 ## 1. 事前準備
 - Docker / Docker Compose v2 が動作していること。
-- `example_data/kaggle-data/*.csv` から `data/kaggle/*.csv` にコピー済み（リポジトリでは既に配置）。`rating.csv` は巨大なため `head -n 50001 data/kaggle/rating.csv > data/kaggle/rating_sample.csv` でサンプルを作成済み。
+- Kaggle からダウンロードした `archive.zip` を `data/` 直下に配置し、`unzip archive.zip -d data/kaggle` で `anime.csv` と `rating.csv` を展開しておく（または `example_data/kaggle-data/*.csv` をコピー）。`rating.csv` は巨大なため `head -n 50001 data/kaggle/rating.csv > data/kaggle/rating_sample.csv` でサンプルを作成済み。
 - `.env` で `NEO4J_AUTH=neo4j/localtest` などデフォルト資格情報を確認。
 
 ## 2. Neo4j を起動
