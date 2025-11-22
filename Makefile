@@ -2,7 +2,7 @@ DOCKER_COMPOSE ?= docker compose -f docker/compose.yml
 NEO4J_USER ?= neo4j
 NEO4J_PASS ?= localtest
 
-.PHONY: help up down logs seed cypher shell status
+.PHONY: help up down logs seed cypher shell status kaggle-data
 
 help:
 	@echo "Available targets:"
@@ -36,3 +36,11 @@ cypher:
 
 shell:
 	$(DOCKER_COMPOSE) exec neo4j cypher-shell -u $(NEO4J_USER) -p $(NEO4J_PASS)
+
+kaggle-data:
+	@echo "Unzipping data/kaggle/archive.zip into data/kaggle/"
+	@[ -f data/kaggle/archive.zip ] || (echo "archive.zip not found under data/kaggle" && exit 1)
+	@tmpdir=$$(mktemp -d); \
+	  unzip -q data/kaggle/archive.zip -d $$tmpdir; \
+	  mv $$tmpdir/* data/kaggle/; \
+	  rm -rf $$tmpdir
