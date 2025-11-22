@@ -1,0 +1,4 @@
+source_title_id,target_title_id,score,by,updated_at
+5114,9253,0.82,genre_cast_user,2024-06-01T00:00:00Z
+5114,32281,0.65,genre_only,2024-06-01T00:00:00Z
+9253,32281,0.7,genre_tag_mix,2024-06-01T00:00:00Z

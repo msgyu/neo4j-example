@@ -1,0 +1,26 @@
+services:
+  neo4j:
+    image: neo4j:5.20
+    container_name: neo4j-local
+    restart: unless-stopped
+    env_file:
+      - ./neo4j.env
+    ports:
+      - '7474:7474' # HTTP UI
+      - '7687:7687' # Bolt driver
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - ../data:/var/lib/neo4j/import
+      - ../data:/workspace/data:ro
+      - ../scripts:/workspace/scripts:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --no-verbose --spider http://localhost:7474 || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  neo4j_data:
+  neo4j_logs:

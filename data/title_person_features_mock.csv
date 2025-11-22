@@ -1,0 +1,8 @@
+title_id,person_id,credit_role,position,billing_order,weight
+32281,P1001,voice_actor,lead,0,1.0
+32281,P1002,voice_actor,lead,1,0.95
+32281,P1003,director,lead,2,0.9
+5114,P1004,voice_actor,lead,0,1.0
+5114,P1005,voice_actor,supporting,1,0.7
+9253,P1006,voice_actor,lead,0,1.0
+9253,P1005,voice_actor,supporting,1,0.7
