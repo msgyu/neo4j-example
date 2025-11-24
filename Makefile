@@ -2,7 +2,7 @@ DOCKER_COMPOSE ?= docker compose -f docker/compose.yml
 NEO4J_USER ?= neo4j
 NEO4J_PASS ?= localtest
 
-.PHONY: help up down logs seed cypher shell status kaggle-data restart
+.PHONY: help up down logs seed cypher shell status kaggle-data restart browser
 
 help:
 	@echo "Available targets:"
@@ -39,6 +39,9 @@ cypher:
 
 shell:
 	$(DOCKER_COMPOSE) exec neo4j cypher-shell -u $(NEO4J_USER) -p $(NEO4J_PASS)
+
+browser:
+	open http://localhost:7474/browser/
 
 kaggle-data:
 	@echo "Unzipping data/kaggle/archive.zip into data/kaggle/"

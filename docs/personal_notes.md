@@ -1,0 +1,1 @@
+- 'completed' kind は Kaggle 含め一般的に存在しないので internally 'rated' などにしている。

@@ -92,16 +92,27 @@ ORDER BY r.score DESC;
 ユーザーが特定作品（例: "Sword Art Online"）を視聴した直後に、関連する作品を提示し継続視聴を促します。
 
 ```cypher
-// ユーザー1の最新視聴として「Sword Art Online」を記録（例）
+// ユーザー1の最新視聴として「Sword Art Online(=title_id: 11757)」を記録（例）
 MERGE (u:User {user_id: '1'})
-MERGE (t:Title {title: 'Sword Art Online'})
+WITH u
+MATCH (t:Title {title_id: '11757'})
 MERGE (u)-[r:INTERACTED_WITH {kind: 'completed'}]->(t)
-SET r.weight = 0.9, r.rating = 4.5;
+SET r.weight = 0.9,
+    r.rating = 4.5,
+    r.status = 'completed',
+    r.source = 'manual_event';
+```
+
+```cypher
+// title_id を調べたいときのサンプル（部分一致検索）
+MATCH (t:Title)
+WHERE toLower(t.title) CONTAINS 'sword art online'
+RETURN t.title, t.title_id;
 ```
 
 ```cypher
 // 視聴作品と同じ出演者・ジャンルから関連コンテンツを抽出
-MATCH (u:User {user_id: '1'})-[:INTERACTED_WITH]->(src:Title {title: 'Sword Art Online'})
+MATCH (u:User {user_id: '1'})-[:INTERACTED_WITH]->(src:Title {title_id: '11757'})
 OPTIONAL MATCH (src)-[:HAS_GENRE]->(g:Genre)
 OPTIONAL MATCH (src)-[:FEATURES]->(p:Person)
 WITH DISTINCT g, p, src

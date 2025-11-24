@@ -9,3 +9,4 @@ docker compose -f docker/compose.yml exec neo4j \
 
 - 成功するとコンソール出力はなく、Neo4j Browser で `MATCH (n) RETURN count(n)` などを実行するとデータが反映されています。
 - `Cannot load from URL` 等のエラーが出た場合は `docs/GRAPH_GETTING_STARTED.md` のトラブルシューティングを参照し、`docker/neo4j.env` やマウント設定を確認してください。
+- `data/*.csv` を更新した場合は再度 `make seed` を実行して取り込み直してください（`docker compose` 設定を変えた場合は `make restart` でコンテナ再作成）。

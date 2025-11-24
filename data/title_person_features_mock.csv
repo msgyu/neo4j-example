@@ -6,3 +6,10 @@ title_id,person_id,credit_role,position,billing_order,weight
 5114,P1005,voice_actor,supporting,1,0.7
 9253,P1006,voice_actor,lead,0,1.0
 9253,P1005,voice_actor,supporting,1,0.7
+5114,P1001,voice_actor,cameo,2,0.4
+9253,P1001,voice_actor,lead,1,0.9
+32281,P1004,voice_actor,supporting,3,0.6
+28977,P1004,voice_actor,lead,0,1.0
+28977,P1005,voice_actor,supporting,1,0.7
+28977,P1006,voice_actor,lead,2,0.95
+28977,P1001,voice_actor,cameo,3,0.4
