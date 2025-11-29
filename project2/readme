@@ -1,0 +1,38 @@
+```mermaid
+graph LR
+  %% ==== 中心: レコメンド対象 ====
+  Series[[Series<br/>（作品・シリーズ単位）]]
+
+  %% ==== エピソード（ログ用） ====
+  Episode((Episode))
+  Episode -->|BELONGS_TO_SERIES| Series
+
+  %% ==== 分類・世界観まわり ====
+  subgraph Taxonomy[分類・世界観での絞り込み軸]
+    Genre((Genre))
+    Tag((Tag))
+    Cluster((ContentCluster))
+    Franchise((Franchise))
+    Publisher((Publisher))
+    Studio((Studio))
+  end
+
+  Series -->|IN_GENRE| Genre
+  Series -->|HAS_TAG| Tag
+
+  %% クラスタ（シリーズのグルーピング）
+  Series -->|IN_CLUSTER| Cluster
+  Genre  -->|HAS_CLUSTER| Cluster
+
+  %% IP / 出版社 / 制作会社
+  Series -->|IN_FRANCHISE| Franchise
+  Series -->|PUBLISHED_BY| Publisher
+  Series -->|PRODUCED_BY| Studio
+
+  %% ==== 人物関係（キャスト・監督など） ====
+  Person((Person))
+  Person -->|ACTED_IN / DIRECTED| Series
+
+  %% ==== 類似度グラフ（共視聴・embedding） ====
+  Series ---|SIMILAR_TO {score}| Series
+```
